@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simulador de punto OLED</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23061015'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23f7ffff'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="tool-panel" aria-labelledby="app-title">
+        <div class="title-block">
+          <p class="section-label">TFG Angela Escudero</p>
+          <h1 id="app-title">Simulador de punto</h1>
+        </div>
+
+        <div class="status-grid">
+          <div>
+            <span class="metric-label">Bloqueo por giro</span>
+            <strong id="gateLabel">activo</strong>
+          </div>
+          <div>
+            <span class="metric-label">Rotacion</span>
+            <strong><span id="rotValue">0</span> dps</strong>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <label class="switch">
+            <input id="gateToggle" type="checkbox" checked>
+            <span></span>
+          </label>
+          <span>Ignorar rotacion de ejes</span>
+        </div>
+
+        <div class="control-stack">
+          <label class="range-row">
+            <span>Y izquierda/derecha</span>
+            <input id="accelH" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+            <output id="accelHValue">0.00 g</output>
+          </label>
+
+          <label class="range-row">
+            <span>Z arriba/abajo</span>
+            <input id="accelV" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+            <output id="accelVValue">0.00 g</output>
+          </label>
+
+          <label class="range-row compact">
+            <span>Giro X</span>
+            <input id="gyroX" type="range" min="-160" max="160" step="1" value="0">
+            <output id="gyroXValue">0 dps</output>
+          </label>
+
+          <label class="range-row compact">
+            <span>Giro Y</span>
+            <input id="gyroY" type="range" min="-160" max="160" step="1" value="0">
+            <output id="gyroYValue">0 dps</output>
+          </label>
+
+          <label class="range-row compact">
+            <span>Giro Z</span>
+            <input id="gyroZ" type="range" min="-160" max="160" step="1" value="0">
+            <output id="gyroZValue">0 dps</output>
+          </label>
+        </div>
+
+        <div class="button-grid" aria-label="Presets">
+          <button class="icon-button" data-pulse="left" type="button" aria-label="Traslacion izquierda">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8 12l6 6M9 12h11"/></svg>
+            <span>Izq.</span>
+          </button>
+          <button class="icon-button" data-pulse="right" type="button" aria-label="Traslacion derecha">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6M4 12h11"/></svg>
+            <span>Der.</span>
+          </button>
+          <button class="icon-button" data-pulse="up" type="button" aria-label="Traslacion arriba">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 14-6-6-6 6M12 9v11"/></svg>
+            <span>Arr.</span>
+          </button>
+          <button class="icon-button" data-pulse="down" type="button" aria-label="Traslacion abajo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 10-6 6-6-6M12 4v11"/></svg>
+            <span>Ab.</span>
+          </button>
+          <button class="icon-button" data-pulse="rotX" type="button" aria-label="Rotar eje X">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.7M20 12a8 8 0 0 1-13.7 5.7M17 3v4h-4M7 21v-4h4"/></svg>
+            <span>Rot X</span>
+          </button>
+          <button class="icon-button" data-pulse="rotY" type="button" aria-label="Rotar eje Y">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c4.4 0 8 1.8 8 4s-3.6 4-8 4-8-1.8-8-4 3.6-4 8-4ZM4 16c0 2.2 3.6 4 8 4s8-1.8 8-4"/></svg>
+            <span>Rot Y</span>
+          </button>
+          <button class="icon-button" data-pulse="rotZ" type="button" aria-label="Rotar eje Z">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M7.8 7.8l2.1 2.1M14.1 14.1l2.1 2.1M16.2 7.8l-2.1 2.1M9.9 14.1l-2.1 2.1"/></svg>
+            <span>Rot Z</span>
+          </button>
+          <button class="icon-button reset" id="resetButton" type="button" aria-label="Centrar punto">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v6h6"/></svg>
+            <span>Reset</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="stage" aria-label="Vista de prueba">
+        <div class="stage-header">
+          <div>
+            <p class="section-label">OLED SSD1306</p>
+            <h2>128 x 64 px</h2>
+          </div>
+          <div class="position-readout">
+            <span>X <strong id="pxValue">64.0</strong></span>
+            <span>Y <strong id="pyValue">32.0</strong></span>
+          </div>
+        </div>
+
+        <div class="oled-frame">
+          <canvas id="oledCanvas" width="128" height="64" aria-label="Pantalla OLED simulada"></canvas>
+        </div>
+
+        <div class="telemetry">
+          <div class="meter">
+            <span>Entrada H</span>
+            <div><i id="meterH"></i></div>
+          </div>
+          <div class="meter">
+            <span>Entrada V</span>
+            <div><i id="meterV"></i></div>
+          </div>
+          <div class="meter">
+            <span>Factor giro</span>
+            <div><i id="meterGate"></i></div>
+          </div>
+        </div>
+
+        <div class="axis-panel">
+          <canvas id="axisCanvas" width="360" height="180" aria-label="Diagrama de ejes"></canvas>
+          <div class="axis-copy">
+            <strong>Ejes del prototipo</strong>
+            <span>Y controla izquierda/derecha. Z controla arriba/abajo. X queda fuera del movimiento de la pantalla.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
