@@ -13,7 +13,7 @@ const float CENTRO_Y = 32.0f;
 const int   ANCHO    = 128;
 const int   ALTO     = 64;
 const int   RADIO_PUNTO = 4;
-const int   MARGEN      = 5;
+const int   MARGEN      = 3;
 const unsigned long SPLASH_MS = 1000;
 
 // --- POSICION Y VELOCIDAD ---
@@ -31,17 +31,17 @@ float hpV = 0.0f;
 
 // --- AJUSTES DE SENSACION ---
 const unsigned long INTERVALO_MS = 10;
-const int   CALIB_MUESTRAS = 100;
+const int   CALIB_MUESTRAS = 200;
 const float HP_ALPHA       = 0.80f;
 const float ZONA_MUERTA    = 0.04f;
 const float GANANCIA_H     = 23500.0f;  // Compensa el ancho 128 frente al alto 64.
 const float GANANCIA_V     = 14000.0f;
 const float FRICCION       = 0.78f;
-const float VEL_MINIMA     = 0.15f;
-const float FRENO_CAMBIO   = 0.50f;
-const float RESPUESTA_INICIAL = 0.0f;
-const float VEL_OBJ_H      = 375.0f;
-const float VEL_OBJ_V      = 500.0f;
+const float VEL_MINIMA     = 0.10f;
+const float FRENO_CAMBIO   = 0.5f;
+const float RESPUESTA_INICIAL = 0.1f;
+const float VEL_OBJ_H      = 1050.0f;
+const float VEL_OBJ_V      = 700.0f;
 const float SIGNO_H        = 1.0f;   // Placa por debajo: giro izquierda -> punto derecha.
 const float SIGNO_V        = 1.0f;   // Avance hacia delante -> punto abajo.
 
@@ -50,7 +50,7 @@ const float ROT_UMBRAL_DPS = 35.0f;
 const unsigned long GIRO_COOLDOWN_MS = 90;
 
 // --- RETORNO AL CENTRO ---
-const unsigned long TIEMPO_IDLE_MS = 100;
+const unsigned long TIEMPO_IDLE_MS = 120;
 const float FUERZA_RETORNO = 16.0f;
 const float FRENO_RETORNO  = 0.95f;
 
@@ -65,7 +65,6 @@ void dibujarLogoCupra(const uint8_t *bitmap, uint8_t ancho, uint8_t alto) {
 }
 
 void animarLogoCupra() {
-  delay(150);
   unsigned long inicio = millis();
 
   while (millis() - inicio < SPLASH_MS) {
@@ -90,7 +89,6 @@ void animarLogoCupra() {
       bitmap = CUPRA_LOGO_FADE_1;
       ancho = CUPRA_LOGO_FADE_1_W;
       alto = CUPRA_LOGO_FADE_1_H;
-      delay(200);
     } else {
       bitmap = CUPRA_LOGO_FADE_2;
       ancho = CUPRA_LOGO_FADE_2_W;
