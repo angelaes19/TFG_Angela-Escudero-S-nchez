@@ -65,6 +65,7 @@ void dibujarLogoCupra(const uint8_t *bitmap, uint8_t ancho, uint8_t alto) {
 }
 
 void animarLogoCupra() {
+  delay(500);
   unsigned long inicio = millis();
 
   while (millis() - inicio < SPLASH_MS) {
